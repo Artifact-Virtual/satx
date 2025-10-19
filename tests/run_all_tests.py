@@ -301,7 +301,7 @@ class ComprehensiveTestReporter:
         }
 
         json_file = self.reports_dir / f'comprehensive_report_{timestamp}.json'
-        with open(json_file, 'w') as f:
+        with open(json_file, 'w', encoding='utf-8') as f:
             json.dump(report, f, indent=2, default=str)
 
     def _generate_html_report(self, test_result, test_paths, system_info, timestamp):
@@ -336,7 +336,7 @@ class ComprehensiveTestReporter:
 </head>
 <body>
     <div class="header">
-        <h1>🚀 SATx Satellite Detection System - Status Report</h1>
+        <h1>SATx Satellite Detection System - Status Report</h1>
         <p>Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</p>
         <p>Report ID: {timestamp}</p>
     </div>
@@ -509,7 +509,7 @@ RECOMMENDATIONS
         summary += f"\n{'='*80}\n"
 
         summary_file = self.reports_dir / f'test_summary_{timestamp}.txt'
-        with open(summary_file, 'w') as f:
+        with open(summary_file, 'w', encoding='utf-8') as f:
             f.write(summary)
 
     def _generate_detailed_log(self, test_result, test_paths, system_info, timestamp):
@@ -540,7 +540,7 @@ Timestamp: {test_detail['timestamp']}
                 log_content += f"Error Info: {json.dumps(test_detail['error_info'], indent=2)}\n"
 
         log_file = self.reports_dir / f'detailed_log_{timestamp}.log'
-        with open(log_file, 'w') as f:
+        with open(log_file, 'w', encoding='utf-8') as f:
             f.write(log_content)
 
     def _calculate_success_rate(self, test_result):
