@@ -1,0 +1,70 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+venv/
+ENV/
+env/
+
+# Recordings (large binary files)
+recordings/
+*.iq
+*.wav
+*.bin
+*.dat
+
+# ML Training Data (large datasets)
+models/training_data/
+*.h5
+*.pkl
+*.pth
+checkpoints/
+
+# Logs
+logs/*.log
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Configuration with sensitive data
+configs/satnogs-api.json
+configs/*_private.ini
+
+# GNU Radio compiled files
+*.pyc
+*.pyo
+
+# Docker
+*.env
+docker-compose.override.yml
