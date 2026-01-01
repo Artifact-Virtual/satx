@@ -568,16 +568,16 @@
 
         <!-- Tabs -->
         <div class="tabs">
-            <button class="tab active" onclick="switchTab('candidates')">
+            <button class="tab active" onclick="switchTab(event, 'candidates')">
                 <i class="fas fa-list"></i> Signal Candidates
             </button>
-            <button class="tab" onclick="switchTab('tracking')">
+            <button class="tab" onclick="switchTab(event, 'tracking')">
                 <i class="fas fa-globe"></i> Satellite Tracking
             </button>
-            <button class="tab" onclick="switchTab('analytics')">
+            <button class="tab" onclick="switchTab(event, 'analytics')">
                 <i class="fas fa-chart-line"></i> Analytics
             </button>
-            <button class="tab" onclick="switchTab('recordings')">
+            <button class="tab" onclick="switchTab(event, 'recordings')">
                 <i class="fas fa-folder"></i> Recordings
             </button>
         </div>
@@ -703,7 +703,7 @@
         createStars();
 
         // Tab switching
-        function switchTab(tabName) {
+        function switchTab(event, tabName) {
             // Update tab buttons
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             event.target.closest('.tab').classList.add('active');
@@ -789,11 +789,23 @@
                 }
                 
                 recordings.forEach(rec => {
+                    // Extract date from filename if available (format: YYYYMMDD_HHMMSS)
+                    let dateStr = 'Unknown';
+                    if (rec.metadata && rec.metadata.timestamp) {
+                        dateStr = new Date(rec.metadata.timestamp).toLocaleDateString();
+                    } else if (rec.filename.match(/(\d{8})_(\d{6})/)) {
+                        const match = rec.filename.match(/(\d{8})_(\d{6})/);
+                        const year = match[1].substr(0, 4);
+                        const month = match[1].substr(4, 2);
+                        const day = match[1].substr(6, 2);
+                        dateStr = new Date(year, month - 1, day).toLocaleDateString();
+                    }
+                    
                     const row = document.createElement('tr');
                     row.innerHTML = `
                         <td>${rec.filename}</td>
                         <td>${rec.size_mb}</td>
-                        <td>${new Date().toLocaleDateString()}</td>
+                        <td>${dateStr}</td>
                         <td><button class="badge success"><i class="fas fa-download"></i> View</button></td>
                     `;
                     tbody.appendChild(row);
