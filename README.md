@@ -65,6 +65,9 @@ Access the dashboard at `http://localhost:8080` after starting the web server.
 - **SatNOGS integration** - Community network validation and data sharing
 - **Automated scheduling and processing pipeline** - End-to-end observation automation
 - **Professional web dashboard** - Modern, responsive UI with real-time monitoring
+- **🆕 Wide-band spectrum scanner** - Advanced scanning with signal identification
+- **🆕 Signal identification system** - Automatic protocol and modulation detection
+- **🆕 Ghost Mode privacy protection** - Bulletproof operational security and anonymity
 - **Optional transmission capabilities** - Authorized transmission with safety protocols
 - **Docker containerization** - Easy deployment and scaling
 - **Comprehensive testing suite** - Automated validation of all components
@@ -334,6 +337,76 @@ The modern web dashboard provides:
 - Color-coded signal strength indicators
 - Animated statistics cards with hover effects
 - Real-time data visualization
+
+### 🔍 Spectrum Scanner
+
+Scan frequency bands to discover active signals:
+
+```bash
+# Scan all configured bands
+python3 scripts/spectrum_scanner.py
+
+# Scan specific band (137-138 MHz)
+python3 scripts/spectrum_scanner.py --band 137.0-138.0
+
+# Save results to file
+python3 scripts/spectrum_scanner.py --output scan_results.json
+```
+
+**Features:**
+- Wide-band frequency scanning
+- Automatic signal detection
+- Signal type identification (Weather satellite, Amateur, CubeSat, etc.)
+- Modulation type detection (FM, FSK, BPSK, etc.)
+- Protocol identification (APT, AX.25, SSTV, etc.)
+- Configurable scan parameters
+
+### 🕵️ Ghost Mode - Privacy Protection
+
+Enable bulletproof privacy and operational security:
+
+```bash
+# Enable maximum privacy (bulletproof)
+python3 scripts/ghost_mode.py --enable --level maximum
+
+# Enable high privacy
+python3 scripts/ghost_mode.py --enable --level high
+
+# Enable standard privacy
+python3 scripts/ghost_mode.py --enable --level standard
+
+# Check status
+python3 scripts/ghost_mode.py --status
+
+# Clean all traces
+python3 scripts/ghost_mode.py --clean
+
+# Disable ghost mode
+python3 scripts/ghost_mode.py --disable
+```
+
+**Privacy Levels:**
+
+- **Standard**: Disables external services, uses anonymous identifiers
+- **High**: Minimizes logging, disables metadata collection, clears location data
+- **Maximum (Bulletproof)**: Enables encryption, memory-only operation, no persistent logs, complete anonymity
+
+**Ghost Mode Features:**
+- 🚫 Disables all external service connections (SatNOGS, etc.)
+- 🎭 Anonymous station identifiers
+- 🗑️ Secure file deletion (3-pass overwrite)
+- 🔒 Data encryption for sensitive information
+- 💾 Memory-only operation mode (minimal disk writes)
+- 📍 Location data anonymization
+- 🛡️ No telemetry or tracking
+- 🧹 Trace cleaning capabilities
+
+**Use Cases:**
+- Security research and testing
+- Monitoring sensitive frequencies
+- Operating in restricted locations
+- Privacy-conscious satellite observation
+- Research requiring operational anonymity
 
 ## Testing
 

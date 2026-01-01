@@ -109,6 +109,55 @@ The scheduler will:
 4. Process recordings
 5. Log all detections
 
+## Advanced Features
+
+### Spectrum Scanner
+
+Scan frequency bands to discover active signals:
+
+```bash
+# Scan all configured bands
+python3 scripts/spectrum_scanner.py
+
+# Scan specific band
+python3 scripts/spectrum_scanner.py --band 137.0-138.0
+```
+
+The scanner will:
+- Sweep configured frequency ranges
+- Detect active signals
+- Identify signal types (NOAA APT, Amateur, CubeSat, etc.)
+- Determine modulation types (FM, FSK, BPSK, etc.)
+- Save results to JSON file
+
+### Ghost Mode (Privacy Protection)
+
+Enable maximum privacy for sensitive operations:
+
+```bash
+# Enable bulletproof privacy
+python3 scripts/ghost_mode.py --enable --level maximum
+
+# Check status
+python3 scripts/ghost_mode.py --status
+
+# Clean all traces when done
+python3 scripts/ghost_mode.py --clean
+```
+
+Ghost Mode provides:
+- 🚫 No external connections
+- 🎭 Anonymous identifiers
+- 🔒 Data encryption
+- 💾 Memory-only operation
+- 🗑️ Secure file deletion
+
+Perfect for:
+- Security research
+- Privacy-conscious observation
+- Operating in sensitive locations
+- Research requiring anonymity
+
 ## Troubleshooting
 
 ### "No module named 'skyfield'"
