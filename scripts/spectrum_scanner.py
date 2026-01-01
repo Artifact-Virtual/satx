@@ -5,12 +5,10 @@ Provides wide-band scanning and signal identification capabilities.
 """
 
 import logging
+import json
 from pathlib import Path
 from datetime import datetime, timezone
-import json
 import configparser
-import subprocess
-import time
 
 try:
     import numpy as np
@@ -32,27 +30,60 @@ class SpectrumScanner:
     def __init__(self, config_file='configs/station.ini'):
         """Initialize scanner with configuration."""
         self.config = configparser.ConfigParser()
-        self.config.read(config_file)
         
-        # Load scanner configuration
-        self.device_id = self.config['station'].get('device_id', '0')
-        self.sample_rate = int(self.config['station'].get('sample_rate', '2400000'))
-        self.gain = float(self.config['station'].get('gain', '49.0'))
-        
-        # Parse frequency bands
-        bands_str = self.config['station'].get('bands', '137.0-138.0, 435.0-438.0')
-        self.bands = self._parse_bands(bands_str)
-        
-        logger.info(f"Scanner initialized with {len(self.bands)} frequency bands")
+        try:
+            self.config.read(config_file)
+            
+            # Load scanner configuration with defaults
+            if 'station' not in self.config:
+                logger.warning(f"Config file {config_file} missing 'station' section. Using defaults.")
+                self.config['station'] = {}
+            
+            self.device_id = self.config['station'].get('device_id', '0')
+            self.sample_rate = int(self.config['station'].get('sample_rate', '2400000'))
+            self.gain = float(self.config['station'].get('gain', '49.0'))
+            
+            # Parse frequency bands
+            bands_str = self.config['station'].get('bands', '137.0-138.0, 435.0-438.0')
+            self.bands = self._parse_bands(bands_str)
+            
+            logger.info(f"Scanner initialized with {len(self.bands)} frequency bands")
+        except Exception as e:
+            logger.error(f"Error initializing scanner: {e}")
+            # Set defaults
+            self.device_id = '0'
+            self.sample_rate = 2400000
+            self.gain = 49.0
+            self.bands = [(137.0e6, 138.0e6), (435.0e6, 438.0e6)]
     
     def _parse_bands(self, bands_str):
         """Parse frequency bands from config."""
         bands = []
-        for band in bands_str.split(','):
-            band = band.strip()
-            if '-' in band:
-                start, end = band.split('-')
-                bands.append((float(start) * 1e6, float(end) * 1e6))
+        try:
+            for band in bands_str.split(','):
+                band = band.strip()
+                if '-' in band:
+                    parts = band.split('-')
+                    if len(parts) == 2:
+                        try:
+                            start = float(parts[0]) * 1e6
+                            end = float(parts[1]) * 1e6
+                            if start < end:  # Validate range
+                                bands.append((start, end))
+                            else:
+                                logger.warning(f"Invalid band range: {band} (start >= end)")
+                        except ValueError:
+                            logger.warning(f"Invalid band format: {band}")
+                    else:
+                        logger.warning(f"Invalid band format: {band} (expected start-end)")
+        except Exception as e:
+            logger.error(f"Error parsing bands: {e}")
+        
+        # Return default if no valid bands
+        if not bands:
+            logger.warning("No valid bands found, using defaults")
+            bands = [(137.0e6, 138.0e6), (435.0e6, 438.0e6)]
+        
         return bands
     
     def scan_band(self, start_freq, end_freq, step_size=None, duration=5):
@@ -274,9 +305,20 @@ def main():
     scanner = SpectrumScanner(config_file=args.config)
     
     if args.band:
-        # Scan specific band
-        start, end = map(float, args.band.split('-'))
-        detections = scanner.scan_band(start * 1e6, end * 1e6)
+        # Scan specific band - validate input
+        try:
+            parts = args.band.split('-')
+            if len(parts) != 2:
+                logger.error("Invalid band format. Use: start-end (e.g., 137.0-138.0)")
+                return 1
+            start, end = float(parts[0]), float(parts[1])
+            if start >= end:
+                logger.error("Invalid band: start frequency must be less than end frequency")
+                return 1
+            detections = scanner.scan_band(start * 1e6, end * 1e6)
+        except ValueError as e:
+            logger.error(f"Invalid band format: {e}")
+            return 1
     else:
         # Scan all configured bands
         detections = scanner.scan_all_bands(output_file=args.output)

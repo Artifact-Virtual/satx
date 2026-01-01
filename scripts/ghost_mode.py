@@ -9,10 +9,8 @@ import os
 import sys
 from pathlib import Path
 import shutil
-import json
-import hashlib
-import secrets
 from datetime import datetime, timezone
+import secrets
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
@@ -116,20 +114,32 @@ class GhostMode:
         logger.warning("\n⚠️  BULLETPROOF GHOST MODE ACTIVE ⚠️")
         logger.warning("No persistent logs. No external connections. No traces.")
     
-    def _disable_external_services(self):
-        """Disable all external service integrations."""
-        # Update config to disable SatNOGS and other external services
+    def _get_or_create_config_section(self, section_name):
+        """Helper to safely get or create config section."""
         try:
             import configparser
             config = configparser.ConfigParser()
             config.read(self.config_file)
             
-            if 'station' in config:
-                config['station']['satnogs_enabled'] = 'false'
-                config['station']['satnogs_station_id'] = ''
-                config['station']['satnogs_api_key'] = ''
+            if section_name not in config:
+                config[section_name] = {}
             
-            # Save config
+            return config
+        except Exception as e:
+            logger.error(f"Error accessing config: {e}")
+            return None
+    
+    def _disable_external_services(self):
+        """Disable all external service integrations."""
+        config = self._get_or_create_config_section('station')
+        if config is None:
+            return
+        
+        try:
+            config['station']['satnogs_enabled'] = 'false'
+            config['station']['satnogs_station_id'] = ''
+            config['station']['satnogs_api_key'] = ''
+            
             with open(self.config_file, 'w') as f:
                 config.write(f)
         except Exception as e:
@@ -137,16 +147,15 @@ class GhostMode:
     
     def _anonymize_station_name(self):
         """Replace station name with anonymous identifier."""
+        config = self._get_or_create_config_section('station')
+        if config is None:
+            return
+        
         try:
-            import configparser
-            config = configparser.ConfigParser()
-            config.read(self.config_file)
-            
-            if 'station' in config:
-                # Generate anonymous station ID
-                anon_id = f"GHOST-{secrets.token_hex(4).upper()}"
-                config['station']['name'] = anon_id
-                config['station']['location'] = 'Undisclosed'
+            # Generate anonymous station ID
+            anon_id = f"GHOST-{secrets.token_hex(4).upper()}"
+            config['station']['name'] = anon_id
+            config['station']['location'] = 'Undisclosed'
             
             with open(self.config_file, 'w') as f:
                 config.write(f)
@@ -161,14 +170,11 @@ class GhostMode:
     
     def _disable_metadata_collection(self):
         """Disable metadata collection in recordings."""
+        config = self._get_or_create_config_section('station')
+        if config is None:
+            return
+        
         try:
-            import configparser
-            config = configparser.ConfigParser()
-            config.read(self.config_file)
-            
-            if 'station' not in config:
-                config['station'] = {}
-            
             # Add ghost mode flag
             config['station']['ghost_mode'] = 'true'
             config['station']['collect_metadata'] = 'false'
@@ -180,17 +186,16 @@ class GhostMode:
     
     def _clear_identifying_info(self):
         """Clear identifying information from config."""
+        config = self._get_or_create_config_section('station')
+        if config is None:
+            return
+        
         try:
-            import configparser
-            config = configparser.ConfigParser()
-            config.read(self.config_file)
-            
-            if 'station' in config:
-                # Keep only essential technical parameters
-                # Clear location data
-                config['station']['latitude'] = '0.0'
-                config['station']['longitude'] = '0.0'
-                config['station']['elevation'] = '0.0'
+            # Keep only essential technical parameters
+            # Clear location data
+            config['station']['latitude'] = '0.0'
+            config['station']['longitude'] = '0.0'
+            config['station']['elevation'] = '0.0'
             
             with open(self.config_file, 'w') as f:
                 config.write(f)
@@ -203,12 +208,18 @@ class GhostMode:
         """Enable encryption for sensitive data."""
         # Create encryption key if not exists
         key_file = Path('configs/.ghost_key')
+        key_file.parent.mkdir(parents=True, exist_ok=True)
+        
         if not key_file.exists():
-            key_file.parent.mkdir(parents=True, exist_ok=True)
-            key = secrets.token_hex(32)
-            key_file.write_text(key)
-            key_file.chmod(0o600)  # Read/write for owner only
-            logger.info("Encryption key generated")
+            try:
+                # Create file with secure permissions from the start
+                fd = os.open(str(key_file), os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+                key = secrets.token_hex(32)
+                os.write(fd, key.encode())
+                os.close(fd)
+                logger.info("Encryption key generated")
+            except Exception as e:
+                logger.error(f"Error creating encryption key: {e}")
         else:
             logger.info("Using existing encryption key")
     
