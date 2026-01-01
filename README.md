@@ -10,6 +10,34 @@
 
 A complete automated system for detecting, tracking, decoding transmissions from satellites passing overhead. SATx leverages SDR hardware, GNU Radio, and machine learning to provide end-to-end satellite observation capabilities with 100% operational reliability.
 
+## 🖥️ Web Dashboard
+
+SATx features a modern, professional web interface for real-time monitoring and control:
+
+<div align="center">
+
+### Main Dashboard
+![SATx Dashboard](https://github.com/user-attachments/assets/ad76e38f-5783-43c9-84dd-6153bb9b6f16)
+
+### Satellite Tracking
+![Satellite Tracking](https://github.com/user-attachments/assets/1c93a5be-c36b-40bd-a79a-6b32feb20bee)
+
+### Analytics View
+![Analytics](https://github.com/user-attachments/assets/2eed5fce-dc17-4fef-ad96-c65c1af90c58)
+
+</div>
+
+**Dashboard Features:**
+- 🎨 Modern dark theme with animated space background
+- 📊 Real-time signal candidate monitoring
+- 🛰️ Live satellite tracking with pass predictions
+- 📈 Analytics and detection statistics
+- 📁 Recording library management
+- 🔄 Auto-refresh every 30 seconds
+- 📱 Fully responsive design
+
+Access the dashboard at `http://localhost:8080` after starting the web server.
+
 ## Table of Contents
 
 - [Features](#features)
@@ -36,10 +64,19 @@ A complete automated system for detecting, tracking, decoding transmissions from
 - **Multi-protocol decoding** - Support for AX.25, AFSK, GMSK, BPSK, QPSK, and more
 - **SatNOGS integration** - Community network validation and data sharing
 - **Automated scheduling and processing pipeline** - End-to-end observation automation
-- **Web dashboard** - Real-time monitoring and control interface
+- **Professional web dashboard** - Modern, responsive UI with real-time monitoring
+- **🆕 Wide-band spectrum scanner** - Advanced scanning with signal identification
+- **🆕 Signal identification system** - Automatic protocol and modulation detection
+- **🆕 Ghost Mode privacy protection** - Bulletproof operational security and anonymity
 - **Optional transmission capabilities** - Authorized transmission with safety protocols
 - **Docker containerization** - Easy deployment and scaling
 - **Comprehensive testing suite** - Automated validation of all components
+
+---
+
+**🚀 New to SATx? Check out the [Quick Start Guide](QUICKSTART.md) to get up and running in minutes!**
+
+---
 
 ## System Status
 
@@ -277,14 +314,99 @@ python tests/run_all_tests.py
 
 ### Web Interface
 
-The web dashboard provides:
-- Real-time system monitoring
-- Pass prediction and scheduling
-- Recording management
-- Signal analysis results
-- System configuration
+**Start the web dashboard:**
 
-Access at: `http://localhost:5000`
+```bash
+python3 web/app.py
+```
+
+The modern web dashboard provides:
+- 📊 **Real-time system monitoring** - Live stats on recordings, candidates, and system status
+- 🛰️ **Satellite tracking** - Active satellite positions and upcoming pass predictions
+- 📈 **Analytics dashboard** - Detection statistics and performance metrics
+- 📁 **Recording management** - Browse and manage your I/Q recording library
+- 🎨 **Beautiful UI** - Professional dark theme with animated space background
+- 🔄 **Auto-refresh** - Updates every 30 seconds automatically
+- 📱 **Responsive design** - Works perfectly on desktop, tablet, and mobile
+
+**Access at:** `http://localhost:8080`
+
+**Features:**
+- Tab-based navigation for different views
+- Search and filter signal candidates
+- Color-coded signal strength indicators
+- Animated statistics cards with hover effects
+- Real-time data visualization
+
+### 🔍 Spectrum Scanner
+
+Scan frequency bands to discover active signals:
+
+```bash
+# Scan all configured bands
+python3 scripts/spectrum_scanner.py
+
+# Scan specific band (137-138 MHz)
+python3 scripts/spectrum_scanner.py --band 137.0-138.0
+
+# Save results to file
+python3 scripts/spectrum_scanner.py --output scan_results.json
+```
+
+**Features:**
+- Wide-band frequency scanning
+- Automatic signal detection
+- Signal type identification (Weather satellite, Amateur, CubeSat, etc.)
+- Modulation type detection (FM, FSK, BPSK, etc.)
+- Protocol identification (APT, AX.25, SSTV, etc.)
+- Configurable scan parameters
+
+### 🕵️ Ghost Mode - Privacy Protection
+
+Enable bulletproof privacy and operational security:
+
+```bash
+# Enable maximum privacy (bulletproof)
+python3 scripts/ghost_mode.py --enable --level maximum
+
+# Enable high privacy
+python3 scripts/ghost_mode.py --enable --level high
+
+# Enable standard privacy
+python3 scripts/ghost_mode.py --enable --level standard
+
+# Check status
+python3 scripts/ghost_mode.py --status
+
+# Clean all traces
+python3 scripts/ghost_mode.py --clean
+
+# Disable ghost mode
+python3 scripts/ghost_mode.py --disable
+```
+
+**Privacy Levels:**
+
+- **Standard**: Disables external services, uses anonymous identifiers
+- **High**: Minimizes logging, disables metadata collection, clears location data
+- **Maximum (Bulletproof)**: Enables encryption, memory-only operation, no persistent logs, complete anonymity
+
+**Ghost Mode Features:**
+- 🚫 Disables all external service connections (SatNOGS, etc.)
+- 🎭 Anonymous station identifiers
+- 🗑️ Secure file deletion (3-pass overwrite)
+- 🔒 Data encryption for sensitive information
+- 💾 Memory-only operation mode (minimal disk writes)
+- 📍 Location data anonymization
+- 🛡️ No telemetry or tracking
+- 🧹 Trace cleaning capabilities
+
+**Use Cases:**
+- Security research and testing
+- Monitoring sensitive frequencies
+- Operating in restricted locations
+- Privacy-conscious satellite observation
+- Research requiring operational anonymity
 
 ## Testing
 

@@ -114,7 +114,8 @@ def main():
     # Create timestamp file
     timestamp_file = tle_dir / 'last_update.txt'
     with open(timestamp_file, 'w') as f:
-        f.write(datetime.utcnow().isoformat() + ' UTC\n')
+        from datetime import timezone
+        f.write(datetime.now(timezone.utc).isoformat() + ' UTC\n')
         f.write(f"Total satellites: {total_sats}\n")
     
     logger.info("TLE download complete!")
