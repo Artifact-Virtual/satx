@@ -5,7 +5,7 @@ Uses Skyfield for accurate orbital calculations and Doppler prediction.
 """
 
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 import json
 import configparser
@@ -133,7 +133,7 @@ class PassPredictor:
         
         # Time window
         t_start = self.ts.now()
-        t_end = self.ts.utc(datetime.utcnow() + timedelta(hours=hours))
+        t_end = self.ts.from_datetime(datetime.now(timezone.utc) + timedelta(hours=hours))
         
         logger.info(f"Predicting passes for next {hours} hours...")
         logger.info(f"From: {t_start.utc_datetime()} UTC")

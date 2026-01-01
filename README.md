@@ -64,10 +64,16 @@ Access the dashboard at `http://localhost:8080` after starting the web server.
 - **Multi-protocol decoding** - Support for AX.25, AFSK, GMSK, BPSK, QPSK, and more
 - **SatNOGS integration** - Community network validation and data sharing
 - **Automated scheduling and processing pipeline** - End-to-end observation automation
-- **Web dashboard** - Real-time monitoring and control interface
+- **Professional web dashboard** - Modern, responsive UI with real-time monitoring
 - **Optional transmission capabilities** - Authorized transmission with safety protocols
 - **Docker containerization** - Easy deployment and scaling
 - **Comprehensive testing suite** - Automated validation of all components
+
+---
+
+**🚀 New to SATx? Check out the [Quick Start Guide](QUICKSTART.md) to get up and running in minutes!**
+
+---
 
 ## System Status
 
