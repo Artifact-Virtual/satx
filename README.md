@@ -10,6 +10,34 @@
 
 A complete automated system for detecting, tracking, decoding transmissions from satellites passing overhead. SATx leverages SDR hardware, GNU Radio, and machine learning to provide end-to-end satellite observation capabilities with 100% operational reliability.
 
+## 🖥️ Web Dashboard
+
+SATx features a modern, professional web interface for real-time monitoring and control:
+
+<div align="center">
+
+### Main Dashboard
+![SATx Dashboard](https://github.com/user-attachments/assets/ad76e38f-5783-43c9-84dd-6153bb9b6f16)
+
+### Satellite Tracking
+![Satellite Tracking](https://github.com/user-attachments/assets/1c93a5be-c36b-40bd-a79a-6b32feb20bee)
+
+### Analytics View
+![Analytics](https://github.com/user-attachments/assets/2eed5fce-dc17-4fef-ad96-c65c1af90c58)
+
+</div>
+
+**Dashboard Features:**
+- 🎨 Modern dark theme with animated space background
+- 📊 Real-time signal candidate monitoring
+- 🛰️ Live satellite tracking with pass predictions
+- 📈 Analytics and detection statistics
+- 📁 Recording library management
+- 🔄 Auto-refresh every 30 seconds
+- 📱 Fully responsive design
+
+Access the dashboard at `http://localhost:8080` after starting the web server.
+
 ## Table of Contents
 
 - [Features](#features)
@@ -277,14 +305,29 @@ python tests/run_all_tests.py
 
 ### Web Interface
 
-The web dashboard provides:
-- Real-time system monitoring
-- Pass prediction and scheduling
-- Recording management
-- Signal analysis results
-- System configuration
+**Start the web dashboard:**
 
-Access at: `http://localhost:5000`
+```bash
+python3 web/app.py
+```
+
+The modern web dashboard provides:
+- 📊 **Real-time system monitoring** - Live stats on recordings, candidates, and system status
+- 🛰️ **Satellite tracking** - Active satellite positions and upcoming pass predictions
+- 📈 **Analytics dashboard** - Detection statistics and performance metrics
+- 📁 **Recording management** - Browse and manage your I/Q recording library
+- 🎨 **Beautiful UI** - Professional dark theme with animated space background
+- 🔄 **Auto-refresh** - Updates every 30 seconds automatically
+- 📱 **Responsive design** - Works perfectly on desktop, tablet, and mobile
+
+**Access at:** `http://localhost:8080`
+
+**Features:**
+- Tab-based navigation for different views
+- Search and filter signal candidates
+- Color-coded signal strength indicators
+- Animated statistics cards with hover effects
+- Real-time data visualization
 
 ## Testing
 
